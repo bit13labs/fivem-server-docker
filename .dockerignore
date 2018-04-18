@@ -1,0 +1,5 @@
+.deploy/
+.git/
+.editorconfig
+.gitignore
+.env

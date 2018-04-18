@@ -1,0 +1,73 @@
+#!groovy
+import com.bit13.jenkins.*
+
+def ProjectName = "fivem-server"
+def teamName = "bit13labs"
+def slack_notify_channel = null
+
+properties ([
+	disableConcurrentBuilds(),
+	[$class: 'ParametersDefinitionProperty',
+		parameterDefinitions: [
+			[
+				$class: 'StringParameterDefinition',
+				name: 'DeployTag',
+				defaultValue: null,
+				description: 'Docker Tag to deploy (default: latest)'
+			]
+		]
+	]
+])
+
+
+node ("docker") {
+	env.CI_PROJECT_NAME = "${ProjectName}"
+	env.CI_DOCKER_ORGANIZATION = "bit13"
+	env.CI_DEPLOYMENT_VERSION_TAG = "latest"
+	currentBuild.result = "SUCCESS"
+	def errorMessage = null
+
+	if(env.BRANCH_NAME ==~ /master$/) {
+			return
+	}
+	if ( params.DeployTag != null && params.DeployTag != '' ) {
+		env.CI_DEPLOYMENT_VERSION_TAG = params.DeployTag
+	}
+	env.CI_BUILD_VERSION = env.CI_DEPLOYMENT_VERSION_TAG
+
+	wrap([$class: 'TimestamperBuildWrapper']) {
+		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+			Notify.slack(this, "STARTED", null, slack_notify_channel)
+			try {
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
+						usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
+					withCredentials([[$class: 'StringBinding', credentialsId: env.CI_VAULT_CREDENTIAL_ID, variable: 'VAULT_AUTH_TOKEN']]) {
+						stage ("install") {
+							Branch.checkout(this, teamName, "${env.CI_PROJECT_NAME}-docker")
+							Pipeline.install(this)
+
+							env.FM_RCON_PASSWORD = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "FM_RCON_PASSWORD")
+							env.SERVER_LICENSE_KEY = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_LICENSE_KEY")
+							env.SERVER_NAME = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_NAME")
+							env.SERVER_TAGS = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_TAGS")
+
+						}
+						stage ("test") {
+								sh script: "${WORKSPACE}/.deploy/validate.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_DEPLOYMENT_VERSION_TAG}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+						stage ("deploy") {
+							sh script: "${WORKSPACE}/.deploy/run.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_DEPLOYMENT_VERSION_TAG}' -o '${env.CI_DOCKER_ORGANIZATION}' -f"
+						}
+					}
+				}
+			} catch(err) {
+				currentBuild.result = "FAILURE"
+				errorMessage = err.message
+				throw err
+			}
+			finally {
+				Pipeline.finish(this, currentBuild.result, errorMessage)
+			}
+		}
+	}
+}
