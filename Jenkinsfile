@@ -45,7 +45,7 @@ node ("docker") {
 								Branch.checkout(this, "${env.CI_PROJECT_NAME}-docker", teamName)
 								Pipeline.install(this)
 
-								env.FM_RCON_PASSWORD = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "FM_RCON_PASSWORD")
+								env.RCON_PASSWORD = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "RCON_PASSWORD")
 								env.SERVER_LICENSE_KEY = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_LICENSE_KEY")
 								env.SERVER_NAME = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_NAME")
 								env.SERVER_TAGS = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "SERVER_TAGS")
