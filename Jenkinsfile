@@ -22,7 +22,7 @@ node ("docker") {
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
 
 	env.CI_BUILD_VERSION = Branch.getSemanticVersion(this)
-	env.CI_DOCKER_ORGANIZATION = "bit13"
+	env.CI_DOCKER_ORGANIZATION = "camalot"
 	env.CI_PROJECT_NAME = ProjectName
 	currentBuild.result = "SUCCESS"
 	def errorMessage = null
