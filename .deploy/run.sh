@@ -49,6 +49,7 @@ PULL_REPOSITORY="${DOCKER_REGISTRY:-"docker.artifactory.bit13.local"}";
 [[ -z "${SERVER_LICENSE_KEY// }" ]] && __error "Environment variable 'SERVER_LICENSE_KEY' missing or is empty";
 [[ -z "${SERVER_NAME// }" ]] && __error "Environment variable 'SERVER_NAME' missing or is empty";
 [[ -z "${SERVER_TAGS// }" ]] && __error "Environment variable 'SERVER_TAGS' missing or is empty";
+[[ -z "${RCON_PASSWORD// }" ]] && __error "Environment variable 'RCON_PASSWORD' missing or is empty";
 
 
 DOCKER_IMAGE="${BUILD_ORG}/${BUILD_PROJECT}:${BUILD_VERSION}";

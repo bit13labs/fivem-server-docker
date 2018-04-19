@@ -40,16 +40,12 @@ WORKDIR="${WORKSPACE:-"$(pwd)"}";
 [[ -z "${ARTIFACTORY_USERNAME// }" ]] && __error "Environment variable 'ARTIFACTORY_USERNAME' missing or empty.";
 [[ -z "${ARTIFACTORY_PASSWORD// }" ]] && __error "Environment variable 'ARTIFACTORY_PASSWORD' missing or empty.";
 
-[[ -z "${FM_RCON_PASSWORD// }" ]] && __error "Environment variable 'FM_RCON_PASSWORD' missing or is empty";
-
-
 tag="${BUILD_ORG}/${BUILD_PROJECT}";
 tag_name_latest="${tag}:latest";
 tag_name_ver="${tag}:${BUILD_VERSION}";
 docker build ${opt_force}--pull \
 	--build-arg BUILD_VERSION="${BUILD_VERSION}" \
 	--build-arg PROJECT_NAME="${BUILD_PROJECT}" \
-	--build-arg FM_RCON_PASSWORD="${FM_RCON_PASSWORD}" \
 	--tag "${tag_name_ver}" \
 	-f "${WORKDIR}/Dockerfile" .;
 

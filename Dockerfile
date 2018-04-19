@@ -2,27 +2,27 @@ FROM alpine:latest
 
 ARG PROJECT_NAME="fivem-server"
 ARG BUILD_VERSION="1.0.0-snapshot"
+
 ARG FM_VERSION="584-30649a49030f8d2ebd016b634ed3239316b38f0a"
-ARG FM_RCON_PASSWORD
-
-LABEL FIVEM_VERSION=${FM_VERSION} \
-	VERSION=${BUILD_VERSION} \
-	LABEL="${PROJECT_NAME}-v${BUILD_VERSION}" \
-	PROJECT_URL="https://github.com/bit13labs/fivem-server-docker"
-
-RUN if [ -z "${FM_RCON_PASSWORD}" ]; then (&>2 echo "Argument FM_RCON_PASSWORD is not set."); exit 1; else : ; fi
-RUN if [ -z "${FM_VERSION}" ]; then (&>2 echo "Argument FM_VERSION is not set."); exit 1; else : ; fi
 
 ENV TCP_ENDPOINT_ADDR=0.0.0.0
 ENV UDP_ENDPOINT_ADDR=0.0.0.0
 ENV TCP_ENDPOINT_PORT=30120
 ENV UDP_ENDPOINT_PORT=30120
 ENV SCRIPT_HOOK_ALLOWED=1
-ENV RCON_PASSWORD="${FM_RCON_PASSWORD}"
+ENV RCON_PASSWORD=
 ENV SERVER_TAGS="dev,test"
 ENV SERVER_NAME="Development Server"
-# REQUIRED: Checked in entrypoint
 ENV SERVER_LICENSE_KEY=""
+
+
+LABEL FIVEM_VERSION=${FM_VERSION} \
+	VERSION=${BUILD_VERSION} \
+	LABEL="${PROJECT_NAME}-v${BUILD_VERSION}" \
+	PROJECT_URL="https://github.com/bit13labs/fivem-server-docker"
+
+RUN if [ -z "${FM_VERSION}" ]; then (&>2 echo "Argument FM_VERSION is not set."); exit 1; else : ; fi
+
 
 WORKDIR /server
 
@@ -38,6 +38,5 @@ RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/ma
 	rm -rf /var/cache/apk/*
 
 COPY server.cfg.j2 ./
-RUN j2 server.cfg.j2 > server.cfg
 
 CMD ["/server/entrypoint.sh", "+exec", "server.cfg"]
