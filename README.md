@@ -7,12 +7,12 @@ This is a FiveM server container.
 ```shell
 docker run -d \
 	--restart unless-stopped \
-	--name ${BUILD_PROJECT} \
+	--name "fivem" \
 	-e TZ=America_Chicago \
 	-e RCON_PASSWORD="<rcon password>" \
 	-e SERVER_NAME="My Super Cool FiveM Server" \
 	-e SERVER_TAGS="dev,test" \
 	-e SERVER_LICENSE_KEY="<server license key>" \
-	-v /mnt/data/${BUILD_PROJECT}:/data \
+	-v /mnt/data/fivem:/data \
 	-t "camalot/fivem-server";
 ```
