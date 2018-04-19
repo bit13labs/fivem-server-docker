@@ -42,7 +42,7 @@ node ("docker") {
 						withCredentials([[$class: 'StringBinding', credentialsId: env.CI_VAULT_CREDENTIAL_ID, variable: 'VAULT_AUTH_TOKEN']]) {
 							stage ("install" ) {
 								deleteDir()
-								Branch.checkout(this, teamName, "${env.CI_PROJECT_NAME}-docker")
+								Branch.checkout(this, "${env.CI_PROJECT_NAME}-docker", teamName)
 								Pipeline.install(this)
 
 								env.FM_RCON_PASSWORD = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "FM_RCON_PASSWORD")
