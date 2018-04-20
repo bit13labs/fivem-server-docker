@@ -26,8 +26,12 @@ RUN if [ -z "${FM_VERSION}" ]; then (&>2 echo "Argument FM_VERSION is not set.")
 
 WORKDIR /server
 
+COPY server.cfg.j2 ./
+COPY entrypoint.sh ./
+
 RUN apk update && apk upgrade && \
-  apk add bash curl git python py2-pip
+  apk add bash curl git python py2-pip \
+	chmod +x entrypoint.sh
 
 RUN pip install --upgrade pip && pip install j2cli && pip install j2cli[yaml]
 RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${FM_VERSION}/fx.tar.xz --output fx.tar.xz && \
@@ -37,7 +41,6 @@ RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/ma
   mv /tmp/cfx-server-data/resources /server/resources && \
 	rm -rf /var/cache/apk/*
 
-COPY server.cfg.j2 ./
 
 EXPOSE ${TCP_ENDPOINT_PORT}:${UDP_ENDPOINT_PORT}/udp
 
