@@ -80,7 +80,6 @@ fi
 
 
 docker run -d \
-    --user 0 \
     --restart unless-stopped \
     --name ${BUILD_PROJECT} \
     -p 30120:30120 \

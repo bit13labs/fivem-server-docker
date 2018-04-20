@@ -42,5 +42,5 @@ RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/ma
 RUN chmod +x "/server/entrypoint.sh"
 
 EXPOSE ${TCP_ENDPOINT_PORT}:${UDP_ENDPOINT_PORT}/udp
-ENTRYPOINT [ "/bin/bash" ]
+
 CMD ["/server/entrypoint.sh", "+exec", "server.cfg"]
