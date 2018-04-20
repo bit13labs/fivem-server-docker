@@ -7,6 +7,6 @@ if [[ -z "${SERVER_NAME// }" ]]; then (&>2 echo "Envrionment Variable SERVER_NAM
 if [[ -z "${SERVER_TAGS// }" ]]; then (&>2 echo "Envrionment Variable SERVER_TAGS is not set."); exit 1; else : ; fi
 
 
-j2 server.cfg.j2 > server.cfg;
+j2 /server/server.cfg.j2 > /server/server.cfg;
 
-/server/run.sh "$@";
+/bin/bash /server/run.sh "$@";

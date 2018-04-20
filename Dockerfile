@@ -26,8 +26,8 @@ RUN if [ -z "${FM_VERSION}" ]; then (&>2 echo "Argument FM_VERSION is not set.")
 
 WORKDIR /server
 
-COPY server.cfg.j2 ./
-COPY entrypoint.sh ./
+COPY server.cfg.j2 /server/server.cfg.j2
+COPY entrypoint.sh /server/entrypoint.sh
 
 RUN apk update && apk upgrade && \
   apk add bash curl git python py2-pip
@@ -42,5 +42,5 @@ RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/ma
 
 
 EXPOSE ${TCP_ENDPOINT_PORT}:${UDP_ENDPOINT_PORT}/udp
-
+ENTRYPOINT [ "/bin/bash" ]
 CMD ["/server/entrypoint.sh", "+exec", "server.cfg"]
