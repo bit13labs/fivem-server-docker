@@ -59,7 +59,7 @@ docker pull "${PULL_REPOSITORY}/${DOCKER_IMAGE}";
 
 
 # CHECK IF IT IS CREATED, IF IT IS, THEN DEPLOY
-DC_INFO=$(docker ps --all --format "table {{.Status}}\t{{.Names}}" | awk '/fivem$/ {print $0}');
+DC_INFO=$(docker ps --all --format "table {{.Status}}\t{{.Names}}" | awk '/fivem-server$/ {print $0}');
 __info "DC_INFO: $DC_INFO";
 DC_STATUS=$(echo "${DC_INFO}" | awk '{print $1}');
 __info "DC_STATUS: $DC_STATUS";
