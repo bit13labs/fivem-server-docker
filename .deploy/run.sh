@@ -87,4 +87,8 @@ docker run -d \
 		-p 30120:30120/udp \
     -e PUID=1000 -e PGID=1000 \
     -e TZ=America_Chicago \
+		-e RCON_PASSWORD="${RCON_PASSWORD}" \
+		-e SERVER_LICENSE_KEY="${SERVER_LICENSE_KEY}" \
+		-e SERVER_NAME="${SERVER_NAME}" \
+		-e SERVER_TAGS="${SERVER_TAGS}" \
     -t "${PULL_REPOSITORY}/${DOCKER_IMAGE}";
