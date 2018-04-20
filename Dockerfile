@@ -31,7 +31,7 @@ COPY entrypoint.sh ./
 
 RUN apk update && apk upgrade && \
   apk add bash curl git python py2-pip \
-	chmod +x entrypoint.sh
+	chmod +x /server/entrypoint.sh
 
 RUN pip install --upgrade pip && pip install j2cli && pip install j2cli[yaml]
 RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${FM_VERSION}/fx.tar.xz --output fx.tar.xz && \
