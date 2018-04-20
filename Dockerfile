@@ -39,4 +39,6 @@ RUN curl --silent https://runtime.fivem.net/artifacts/fivem/build_proot_linux/ma
 
 COPY server.cfg.j2 ./
 
+EXPOSE ${TCP_ENDPOINT_PORT}:${UDP_ENDPOINT_PORT}/udp
+
 CMD ["/server/entrypoint.sh", "+exec", "server.cfg"]
