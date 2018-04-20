@@ -87,5 +87,4 @@ docker run -d \
 		-p 30120:30120/udp \
     -e PUID=1000 -e PGID=1000 \
     -e TZ=America_Chicago \
-    -v /mnt/data/${BUILD_PROJECT}:/data \
     -t "${PULL_REPOSITORY}/${DOCKER_IMAGE}";
