@@ -22,7 +22,7 @@ properties ([
 
 node ("docker") {
 	env.CI_PROJECT_NAME = "${ProjectName}"
-	env.CI_DOCKER_ORGANIZATION = "bit13"
+	env.CI_DOCKER_ORGANIZATION = "camalot"
 	env.CI_DEPLOYMENT_VERSION_TAG = "latest"
 	currentBuild.result = "SUCCESS"
 	def errorMessage = null
